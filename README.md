@@ -3,7 +3,7 @@ Various notes/programs on counting different types of algebraic strucutres
 
 ## Definitions
 
-For a set $S$ and a binary operation $ \cdot: S \times S \to S $, we have the following inclusions of classes of algebraic structures:
+For a set $S$ and a binary operation $\cdot: S \times S \to S $, we have the following inclusions of classes of algebraic structures:
 $$
 \begin{gather*}
 \text{magma} & & &\\
@@ -19,7 +19,7 @@ $$
  - a **magma** is a set $S$ with a *closed* binary operation (i.e. $\forall a,b \in S \; . \; a \cdot b \in S $)
  - a **semigroup** is a magma with an *associative* operation (i.e. $\forall a,b,c \in S  \; . \;  (a \cdot b ) \cdot c = a \cdot (b \cdot c)  $ )
  - a **monoid** is a semigroup with an *identity* element (i.e. $\exists e \in S \;  \forall a \in S \; . \; (e \cdot a = a \cdot e = a )$)
- - a **group** is a monoid with *inverses* (i.e. $ \forall  a \in S \; \exists a^{-1} \in S \; . \; (a \cdot a^{-1} = a^{-1} \cdot a = e )  $)
+ - a **group** is a monoid with *inverses* (i.e. $\forall  a \in S \; \exists a^{-1} \in S \; . \; (a \cdot a^{-1} = a^{-1} \cdot a = e )  $)
 
 
 Given a set $R$ with two binary operations $+: R \times R \to R $ and $\cdot : R \times R \to R $, $R$ is a **ring** if:
