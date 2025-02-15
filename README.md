@@ -4,8 +4,7 @@ Various notes/programs on counting different types of algebraic strucutres
 ## Definitions
 
 For a set $S$ and a binary operation $\cdot: S \times S \to S $, we have the following inclusions of classes of algebraic structures:
-$$
-\begin{gather*}
+$$\begin{gather*}
 \text{magma} & & &\\
 \cup & & & \\
 \text{semigroup} &\supset &\text{commutative semigroup} \\
@@ -13,8 +12,7 @@ $$
 \text{monoid} &\supset &\text{commutative monoid}\\
 \cup & & & \\
 \text{group} &\supset &\text{abelian/commutative group}
-\end{gather*}
-$$
+\end{gather*}$$
 
  - a **magma** is a set $S$ with a *closed* binary operation (i.e. $\forall a,b \in S \; . \; a \cdot b \in S $)
  - a **semigroup** is a magma with an *associative* operation (i.e. $\forall a,b,c \in S  \; . \;  (a \cdot b ) \cdot c = a \cdot (b \cdot c)  $ )
@@ -50,4 +48,4 @@ We have that:
 ### Magmas
 Note that for any set $S$ with $|S| = n$, a closed operation $\cdot: S^2 \to S $ is essentially a function from the set $\underbrace{ \{ (1, 1), \cdots (1, n), \cdots (n,1), \cdots, (n,n)\} }_{n^2 \text{ elements}} \mapsto \{ 1 \cdots n \}$ - there are $n^{n^2}$ such functions.
 
-A subset of these multiplications are associative.  
+A subset of these multiplications are associative. We use a similar approach to the [DPLL algorithm](https://en.wikipedia.org/wiki/DPLL_algorithm) to [count](./count_semigroups.py) all non-isomorphic semigroups of small orders:
