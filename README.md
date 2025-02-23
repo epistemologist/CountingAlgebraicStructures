@@ -50,24 +50,8 @@ Note that for any set $S$ with $|S| = n$, a closed operation $\cdot: S^2 \to S $
 
 A subset of these multiplications are associative. We use a similar approach to the [DPLL algorithm](https://en.wikipedia.org/wiki/DPLL_algorithm) to [count](./count_semigroups.py) all non-isomorphic semigroups of small orders:
 
-```python
-   ...: for n in range(1, 7):                                                                                                                 
-   ...:     X = number_of_semigroups(n,  suppress_output=(n<5))                                                                               
-   ...:                                                      
-Counted 1 of order 1 in 0:00:00.001019                                 
-Counted 5 of order 2 in 0:00:00.001440                                 
-Counted 24 of order 3 in 0:00:00.024050                                                                                                       
-Counted 188 of order 4 in 0:00:02                                      
-[+] Generating possible Cayley tables...                               
-319484it [03:44, 1422.24it/s]                                                                                                                 
-[+] Filtering out some isomorphic models                               
-100%|██████████████████████████████████████████████████████████████████████████████████████████████| 115552/115552 [00:05<00:00, 22491.26it/s]
-[+] Final isomorphism check                                                                                                                   
-100%|█████████████████████████████████████████████████████████████████████████████████████████████████████| 1914/1914 [06:13<00:00,  5.13it/s]
-Counted 1915 of order 5 in 0:10:05
-```
 
-```
+```txt
 Counted 1 semigroups of order 1 in 0:00:00.007976
 Counted 5 semigroups of order 2 in 0:00:00.030633
 Counted 24 semigroups of order 3 in 0:00:00.114370
@@ -87,3 +71,13 @@ Counted 1915 semigroups of order 5 in 0:02:13
 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 28633/28633 [37:23<00:00, 12.76it/s]
 Counted 28634 semigroups of order 6 in 7:18:51
 ```
+
+We have the following values of a(n) = the number of semigroups of order n up to isomorphism:
+| n    | a(n) | time | number of canidates |
+|-|-|-|-|
+|1|1|0.007s|n/a
+|2|5|0.03s|n/a
+|3|24|0.11s|172
+|4|188|1s|5559
+|5|1915|2m13s|115552
+|6|28634|7:18:51s|29451749
