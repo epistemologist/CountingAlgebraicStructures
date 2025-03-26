@@ -3,7 +3,8 @@ from pathlib import Path
 from typing import List
 import subprocess, sys, os, re
 
-from group import *
+from group import Group
+from isomorphism import Isomorphism
 
 LADR_LOCATION = "../LADR-2009-11A"  # Main directory of LADR
 
@@ -12,7 +13,7 @@ def toss_out_nonisomorphic(groups: List[Group]) -> List[Group]:
     isomorphism_classes = [ [groups[0]] ]
     for G in groups[1:]:
         for i in range(len(isomorphism_classes)):
-            if Group.is_isomorphic(G, isomorphism_classes[i][0]):
+            if Isomorphism.are_isomorphic(G, isomorphism_classes[i][0]):
                 isomorphism_classes[i].append(G)
                 break
         else:
@@ -23,7 +24,7 @@ def enumerate_group(order: int, method="ladr") -> List[Group]:
     if method == "brute":
         raise NotImplementedError()
     elif method == "ladr":
-        return enumerate_group_ladr(order)
+        return toss_out_nonisomorphic( enumerate_group_ladr(order) )
 
 def enumerate_group_ladr(order: int, filter_isomorphic: bool = False) -> List[Group]:
     tmp_filename = str(Path("./models.tmp").absolute())

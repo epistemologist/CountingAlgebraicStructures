@@ -45,7 +45,7 @@ We have that:
  - a **division ring** is a ring with 1 with *multiplicative inverses* for all non-zero elements (i.e. $\forall  a\in R \exists a^{-1} \in R \; (a \cdot a^{-1} = a^{-1} \cdot a = 1 )$)
  - a **field** is a division ring with *commutative multiplication*
 
-### Magmas
+### Magmas / Semigroups
 Note that for any set $S$ with $|S| = n$, a closed operation $\cdot: S^2 \to S $ is essentially a function from the set $\underbrace{ \{ (1, 1), \cdots (1, n), \cdots (n,1), \cdots, (n,n)\} }_{n^2 \text{ elements}} \mapsto \{ 1 \cdots n \}$ - there are $n^{n^2}$ such functions.
 
 A subset of these multiplications are associative. We use a similar approach to the [DPLL algorithm](https://en.wikipedia.org/wiki/DPLL_algorithm) to [count](./count_semigroups.py) all non-isomorphic semigroups of small orders:
@@ -81,3 +81,53 @@ We have the following values of a(n) = the number of semigroups of order n up to
 |4|188|1s|5559
 |5|1915|2m13s|115552
 |6|28634|7:18:51s|29451749
+
+We can also enumerate isomorphic semigroups with the more general tool [mace](http://google.com):
+
+```sh
+#!/bin/bash
+
+LADR_PATH="./LADR-2009-11A"
+
+check() {
+    order=$1;
+    echo "
+assign(max_models, -1).
+assign(domain_size, $order).
+
+set(verbose).
+set(trace).
+
+formulas(assumptions).
+    (x*y)*z = x*(y*z).
+end_of_list.
+
+formulas(goals).
+end_of_list.
+    " | tail -c +2 | \
+       $LADR_PATH/bin/mace4 | \
+       $LADR_PATH/bin/interpformat standard | \
+       $LADR_PATH/bin/isofilter --ignore-constants
+}
+
+for n in $(seq 2 5); do
+    echo "%", $n
+    check $n;
+done
+
+```
+```txt
+$ ./gen_semigroup.sh |& grep "%"
+%, 2
+% isofilter --ignore-constants: input=8, kept=5, checks=8, erms=14, 0.00 seconds.
+%, 3
+% isofilter --ignore-constants: input=96, kept=24, checks=155, perms=230, 0.01 seconds.
+%, 4
+% isofilter --ignore-constants: input=2331, kept=188, checks=7217, perms=18071, 0.07 seconds.
+%, 5
+% isofilter --ignore-constants: input=90536, kept=1915, checks=556359, perms=1793809, 6.30 seconds.
+```
+
+We will use this program to investigate other kinds of algebraic structures,
+
+### Small Groups

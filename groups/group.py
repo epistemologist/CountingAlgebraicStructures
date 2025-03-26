@@ -5,16 +5,13 @@ from operator import mul
 from typing import List, Optional, Set, Callable
 from collections import defaultdict, Counter, namedtuple
 from math import factorial, prod
-from itertools import permutations, product
-from subprocess import Popen, check_output, PIPE
+from subprocess import Popen, PIPE
 from time import sleep
+from itertools import permutations, product
 from tqdm import tqdm
 import re
 
 VERBOSE = True
-MAX_ITER = 1_000_000_000
-#MAX_ITER = -1
-
 GAP_LOCATION = "/usr/bin/gap"
 GAP_PROC = Popen(
 	[GAP_LOCATION, "-b", "-q"],
@@ -132,7 +129,6 @@ def construct_group(
 
 GroupInfo = namedtuple("GroupInfo", ["id", "desc"])
 
-
 class Group:
 	def __init__(
 		self,
@@ -165,6 +161,10 @@ class Group:
 	def __repr__(self):
 		return f"Group {self.group_name} of {self.order} elements: {self.elements}"
 
+	def __eq__(self, other):
+		# Groups are equal iff their Cayley tables are equal
+		return self.cayley_table == other.cayley_table
+
 	def __getitem__(self, idx):
 		return [e for e in self.elements if e.idx == idx][0]
 
@@ -190,75 +190,12 @@ class Group:
 			x for x in self.elements if all([x * y == y * x for y in self.elements])
 		]
 
-	@staticmethod
-	def group_different(G: Group, H: Group) -> bool:
-		# Returns True if G and H are non-isomorphic
-		# NOTE: This will **not** return True if G and H are isomorphic
-		# This is to just filter out groups that are non-isomorphic
-		if G.order != H.order:
-			return True
-		if Counter([x.order for x in G]) != Counter([x.order for x in H]):
-			return True
-		if len(G.center) != len(H.center):
-			return True
-		return False
-
-	@staticmethod
-	def check_isomorphism(G: Group, H: Group, ϕ: Callable) -> bool:
-		# Note here, we assume that ϕ is well-defined and sends elements from G to H
-		# This function returns whether the function ϕ is a group isomorphism
-		if G.order != H.order:
-			return False
-		# ϕ(x_i *_G x_j) = ϕ(x_i) *_H ϕ(x_j)
-		for xi in G.elements:
-			for xj in G.elements:
-				if ϕ(xi * xj) != ϕ(xi) * ϕ(xj):
-					return False
-		return True
-
-	@staticmethod
-	def isomorphism_brute(G: Group, H: Group) -> bool:
-		# Checks whether or not G and H are isomorphic via brute force
-		# NOTE: This takes a long time - only works for small groups
-		print(f"[+] Checking isomorphism between {G.group_name} and {H.group_name}")
-		def gen_isomorphism_invariants(X: Group):
-			# For each element in group, calculate an isomorphism invariant
-			# x -> (order of x, x in center)
-			C_X = X.center
-			isom_invariants = [(x, (x.order, x in C_X)) for x in X]
-			invariant_dict = defaultdict(list)
-			for elem, invariant in isom_invariants:
-				invariant_dict[invariant].append(elem)
-			return invariant_dict
-
-		G_invariants = gen_isomorphism_invariants(G)
-		H_invariants = gen_isomorphism_invariants(H)
-		if set(G_invariants) != set(H_invariants):
-			return False
-		invariants = G_invariants
-
-		# Construct sets fixed by isomorphism
-		# i.e. subsets G_i ⊆ G and H_i ⊆ H such that an isomorphism ϕ fixes each G_i and H_i
-		# we have ϕ(G_i) = H_i for all i
-		fixed_sets = [(G_invariants[i], H_invariants[i]) for i in invariants]
-		domain = sum([i[0] for i in fixed_sets], [])
-		codomain_iterator = product(*[permutations(i[1]) for i in fixed_sets])
-		iterator_len = prod([factorial(len(i[0])) for i in fixed_sets])
-		if iterator_len > MAX_ITER:
-			raise ValueError(f"too many iterations!: {iterator_len} > {MAX_ITER}")
-		for codomain_candidate in ( tqdm(codomain_iterator, total=iterator_len) if VERBOSE else codomain_iterator ):
-			codomain = sum(map(list, codomain_candidate), [])
-			mapping = dict(zip(domain, codomain))
-			if Group.check_isomorphism(G, H, lambda g: mapping[g]):
-				if VERBOSE:
-					print(mapping)
-				return True
-		return False
 
 	def _to_gap(self) -> str:
 		return str([[i + 1 for i in row] for row in self.cayley_table])
 
-	def get_group_description(self) -> GroupInfo:
+	@cached_property
+	def group_description(self) -> GroupInfo:
 		gap_code = [
 			rf"G := GroupByMultiplicationTable( {self._to_gap() } );",
 			r'Print("id:", IdGroup(G), "\n");'
@@ -269,25 +206,3 @@ class Group:
 			id = re.search("id:(.*)", output).group(1),
 			desc = re.search("desc:(.*)", output).group(1)		
 		)
-
-	@staticmethod
-	def isomorphism_gap(G: Group, H: Group) -> bool:
-		# Check whether or not G and H are isomorphic via GAP
-		# NOTE: Requires GAP to be installed
-		gap_code = [
-			f"G1 := GroupByMultiplicationTable( {G._to_gap() }  );",
-			f"G2 := GroupByMultiplicationTable( {H._to_gap()} ); ",
-			"IsomorphismGroups(G1, G2);",
-		]
-		gap_output = run_gap_code(gap_code_lines=gap_code)
-		return gap_output[-1] != b"fail"
-
-	def is_isomorphic(self, other: Group, method="brute") -> bool:
-		if Group.group_different(self, other):
-			return False
-		try:
-			return Group.isomorphism_brute(self, other)
-		except Exception as e:
-			if VERBOSE:
-				print(f"[+] Isomorphism test failed!: {e}")
-			return Group.isomorphism_gap(self, other)
