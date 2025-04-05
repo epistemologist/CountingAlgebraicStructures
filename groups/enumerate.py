@@ -8,12 +8,12 @@ from isomorphism import Isomorphism
 
 LADR_LOCATION = "../LADR-2009-11A"  # Main directory of LADR
 
-def toss_out_nonisomorphic(groups: List[Group]) -> List[Group]:
+def toss_out_nonisomorphic(groups: List[Group], method: str) -> List[Group]:
     if len(groups) == 1: return groups
     isomorphism_classes = [ [groups[0]] ]
     for G in groups[1:]:
         for i in range(len(isomorphism_classes)):
-            if Isomorphism.are_isomorphic(G, isomorphism_classes[i][0]):
+            if Isomorphism.are_isomorphic(G, isomorphism_classes[i][0], method=method):
                 isomorphism_classes[i].append(G)
                 break
         else:
@@ -24,9 +24,9 @@ def enumerate_group(order: int, method="ladr") -> List[Group]:
     if method == "brute":
         raise NotImplementedError()
     elif method == "ladr":
-        return toss_out_nonisomorphic( enumerate_group_ladr(order) )
+        return enumerate_group_ladr(order) 
 
-def enumerate_group_ladr(order: int, filter_isomorphic: bool = False) -> List[Group]:
+def enumerate_group_ladr(order: int) -> List[Group]:
     tmp_filename = str(Path("./models.tmp").absolute())
     proc = subprocess.Popen(
         [str(Path("./gen_tables.sh").absolute()), str(order), tmp_filename],
@@ -42,9 +42,7 @@ def enumerate_group_ladr(order: int, filter_isomorphic: bool = False) -> List[Gr
         (re.match("=\(number,(\d+)\)", model[1][0]).group(1), model[2][0][3])
         for model in models
     ]
-    groups_out = [
+    return [
         Group(cayley_table=cayley_table, group_name=f"G_{number}")
         for number, cayley_table in group_data
     ]
-    return groups_out if not filter_isomorphic else toss_out_nonisomorphic(groups_out)
-
