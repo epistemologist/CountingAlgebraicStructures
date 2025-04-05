@@ -42,11 +42,12 @@ $$
 
 We have that:
  - a **ring with 1** is a ring with a *multiplicative identity* (i.e. $\exists 1 \in R \; \forall a \in R (1 \cdot a = a \cdot 1 = a)$)
- - a **division ring** is a ring with 1 with *multiplicative inverses* for all non-zero elements (i.e. $\forall  a\in R \exists a^{-1} \in R \; (a \cdot a^{-1} = a^{-1} \cdot a = 1 )$)
+ - a **division ring** is a ring with 1 with *multiplicative inverses* for all non-zero elements (i.e. $\forall a\in R \; \exists a^{-1} \in R \;(a \cdot a^{-1} = a^{-1} \cdot a = 1)$)
  - a **field** is a division ring with *commutative multiplication*
 
 ### Magmas / Semigroups
-Note that for any set $S$ with $|S| = n$, a closed operation $\cdot: S^2 \to S $ is essentially a function from the set $\underbrace{ \{ (1, 1), \cdots (1, n), \cdots (n,1), \cdots, (n,n)\} }_{n^2 \text{ elements}} \mapsto \{ 1 \cdots n \}$ - there are $n^{n^2}$ such functions.
+Note that for any set $S$ with $|S| = n$, a closed operation $\cdot: S^2 \to S$ is essentially a function from the set 
+$\underbrace{ \{ (1, 1), \cdots (1, n), \cdots (n,1), \cdots, (n,n)\} }_{n^2 \text{ elements}} \mapsto \{ 1 \cdots n \}\;\;$ - there are $n^{n^2}$ such functions.
 
 A subset of these multiplications are associative. We use a similar approach to the [DPLL algorithm](https://en.wikipedia.org/wiki/DPLL_algorithm) to [count](./count_semigroups.py) all non-isomorphic semigroups of small orders:
 
@@ -167,10 +168,8 @@ sys     0m14.156s
 
 #### Note on Asymptotics
 
-Cayley tables of higher order groups can be calculated but isomorphism checking becomes prohibitively costly - as an example, suppose we wanted to calculate all groups of order $2^n$ via this kind of brute force isomorphism checking. We would need to check $\text{gnu}(2^n)^2 \sim 2^{4n^3/27} $ pairs of groups for isomorphism - therefore, we have that the total computation would take 
-$$\begin{align*}
-O( 2^{4n^3/27}  \cdot (2^n)!) &= O\left(2^{4n^3/27} \cdot \left( 2^{n/2} \cdot 2^{n 2^n} \cdot e^{-2^n} \right) \right) \\
-&= \cdots = O(2^{n 2^n})
-\end{align*}$$
-or superexponential in $n$. Therefore, this approach only works for very small $n$ (in my testing, I was able to only get this to work for $2^n = 32$).
+Cayley tables of higher order groups can be calculated but isomorphism checking becomes prohibitively costly - as an example, suppose we wanted to calculate all groups of order $2^n$ via this kind of brute force isomorphism checking. We would need to check $\text{gnu}(2^n)^2 \sim 2^{4n^3/27}$ pairs of groups for isomorphism - therefore, we have that the total computation would take 
 
+$$\begin{align*}O( 2^{4n^3/27}  \cdot (2^n)!) &= O\left(2^{4n^3/27} \cdot \left( 2^{n/2} \cdot 2^{n 2^n} \cdot e^{-2^n} \right) \right) \\ &= \cdots = O(2^{n 2^n})\end{align*}$$
+
+or superexponential in $n$. Therefore, this approach only works for very small $n$ (in my testing, I was able to only get this to work for $2^n = 32$).
