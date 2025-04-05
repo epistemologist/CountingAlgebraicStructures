@@ -131,3 +131,46 @@ $ ./gen_semigroup.sh |& grep "%"
 We will use this program to investigate other kinds of algebraic structures,
 
 ### Small Groups
+Using the code in the `./groups` folder of this directory (essentially a wrapper around LADR with isomorphism checking), we can enumerate all possible groups of order $\le 24$ in a reasonable amount of time
+
+```txt
+# time python3 example.py
+# ...
+Groups of order 2: [GroupInfo(id='[ 2, 1 ]', desc='C2')], in time 7.832343101501465 s
+Groups of order 3: [GroupInfo(id='[ 3, 1 ]', desc='C3')], in time 0.7034687995910645 s
+Groups of order 4: [GroupInfo(id='[ 4, 2 ]', desc='C2 x C2'), GroupInfo(id='[ 4, 1 ]', desc='C4')], in time 1.5505971908569336 s
+Groups of order 5: [GroupInfo(id='[ 5, 1 ]', desc='C5')], in time 0.7036712169647217 s
+Groups of order 6: [GroupInfo(id='[ 6, 1 ]', desc='S3'), GroupInfo(id='[ 6, 2 ]', desc='C6')], in time 1.39094877243042 s
+Groups of order 7: [GroupInfo(id='[ 7, 1 ]', desc='C7')], in time 0.7122411727905273 s
+Groups of order 8: [GroupInfo(id='[ 8, 5 ]', desc='C2 x C2 x C2'), GroupInfo(id='[ 8, 3 ]', desc='D8'), GroupInfo(id='[ 8, 2 ]', desc='C4 x C2'), GroupInfo(id='[ 8, 4 ]', desc='Q8'), GroupInfo(id='[ 8, 1 ]', desc='C8')], in time 3.3063130378723145 s
+Groups of order 9: [GroupInfo(id='[ 9, 2 ]', desc='C3 x C3'), GroupInfo(id='[ 9, 1 ]', desc='C9')], in time 1.3442790508270264 s
+Groups of order 10: [GroupInfo(id='[ 10, 1 ]', desc='D10'), GroupInfo(id='[ 10, 2 ]', desc='C10')], in time 1.421013593673706 s
+Groups of order 11: [GroupInfo(id='[ 11, 1 ]', desc='C11')], in time 0.7484531402587891 s
+Groups of order 12: [GroupInfo(id='[ 12, 4 ]', desc='D12'), GroupInfo(id='[ 12, 5 ]', desc='C6 x C2'), GroupInfo(id='[ 12, 3 ]', desc='A4'), GroupInfo(id='[ 12, 1 ]', desc='C3 : C4'), GroupInfo(id='[ 12, 2 ]', desc='C12')], in time 5.609140634536743 s
+Groups of order 13: [GroupInfo(id='[ 13, 1 ]', desc='C13')], in time 0.8768317699432373 s
+Groups of order 14: [GroupInfo(id='[ 14, 1 ]', desc='D14'), GroupInfo(id='[ 14, 2 ]', desc='C14')], in time 3.549271821975708 s
+Groups of order 15: [GroupInfo(id='[ 15, 1 ]', desc='C15')], in time 42.58747839927673 s
+Groups of order 16: [GroupInfo(id='[ 16, 14 ]', desc='C2 x C2 x C2 x C2'), GroupInfo(id='[ 16, 11 ]', desc='C2 x D8'), GroupInfo(id='[ 16, 10 ]', desc='C4 x C2 x C2'), GroupInfo(id='[ 16, 3 ]', desc='(C4 x C2) : C2'), GroupInfo(id='[ 16, 7 ]', desc='D16'), GroupInfo(id='[ 16, 8 ]', desc='QD16'), GroupInfo(id='[ 16, 12 ]', desc='C2 x Q8'), GroupInfo(id='[ 16, 2 ]', desc='C4 x C4'), GroupInfo(id='[ 16, 5 ]', desc='C8 x C2'), GroupInfo(id='[ 16, 6 ]', desc='C8 : C2'), GroupInfo(id='[ 16, 9 ]', desc='Q16'), GroupInfo(id='[ 16, 1 ]', desc='C16')], in time 520.2422976493835 s
+Groups of order 17: [GroupInfo(id='[ 17, 1 ]', desc='C17')], in time 2.514155387878418 s
+Groups of order 18: [GroupInfo(id='[ 18, 4 ]', desc='(C3 x C3) : C2'), GroupInfo(id='[ 18, 1 ]', desc='D18'), GroupInfo(id='[ 18, 3 ]', desc='C3 x S3'), GroupInfo(id='[ 18, 5 ]', desc='C6 x C3'), GroupInfo(id='[ 18, 2 ]', desc='C18')], in time 172.24005222320557 s
+Groups of order 19: [GroupInfo(id='[ 19, 1 ]', desc='C19')], in time 7.11696195602417 s
+Groups of order 20: [GroupInfo(id='[ 20, 4 ]', desc='D20'), GroupInfo(id='[ 20, 5 ]', desc='C10 x C2'), GroupInfo(id='[ 20, 3 ]', desc='C5 : C4'), GroupInfo(id='[ 20, 1 ]', desc='C5 : C4'), GroupInfo(id='[ 20, 2 ]', desc='C20')], in time 192.39055252075195 s
+Groups of order 21: [GroupInfo(id='[ 21, 1 ]', desc='C7 : C3'), GroupInfo(id='[ 21, 2 ]', desc='C21')], in time 29.25878596305847 s
+Groups of order 22: [GroupInfo(id='[ 22, 1 ]', desc='D22'), GroupInfo(id='[ 22, 2 ]', desc='C22')], in time 33.13249969482422 s
+Groups of order 23: [GroupInfo(id='[ 23, 1 ]', desc='C23')], in time 31.336970806121826 s
+Groups of order 24: [GroupInfo(id='[ 24, 14 ]', desc='C2 x C2 x S3'), GroupInfo(id='[ 24, 15 ]', desc='C6 x C2 x C2'), GroupInfo(id='[ 24, 13 ]', desc='C2 x A4'), GroupInfo(id='[ 24, 8 ]', desc='(C6 x C2) : C2'), GroupInfo(id='[ 24, 6 ]', desc='D24'), GroupInfo(id='[ 24, 12 ]', desc='S4'), GroupInfo(id='[ 24, 10 ]', desc='C3 x D8'), GroupInfo(id='[ 24, 5 ]', desc='C4 x S3'), GroupInfo(id='[ 24, 7 ]', desc='C2 x (C3 : C4)'), GroupInfo(id='[ 24, 9 ]', desc='C12 x C2'), GroupInfo(id='[ 24, 4 ]', desc='C3 : Q8'), GroupInfo(id='[ 24, 11 ]', desc='C3 x Q8'), GroupInfo(id='[ 24, 3 ]', desc='SL(2,3)'), GroupInfo(id='[ 24, 1 ]', desc='C3 : C8'), GroupInfo(id='[ 24, 2 ]', desc='C24')], in time 5111.373787164688 s
+
+real    102m52.736s
+user    4m8.469s
+sys     0m14.156s
+```
+
+#### Note on Asymptotics
+
+Cayley tables of higher order groups can be calculated but isomorphism checking becomes prohibitively costly - as an example, suppose we wanted to calculate all groups of order $2^n$ via this kind of brute force isomorphism checking. We would need to check $\text{gnu}(2^n)^2 \sim 2^{4n^3/27} $ pairs of groups for isomorphism - therefore, we have that the total computation would take 
+$$\begin{align*}
+O( 2^{4n^3/27}  \cdot (2^n)!) &= O\left(2^{4n^3/27} \cdot \left( 2^{n/2} \cdot 2^{n 2^n} \cdot e^{-2^n} \right) \right) \\
+&= \cdots = O(2^{n 2^n})
+\end{align*}$$
+or superexponential in $n$. Therefore, this approach only works for very small $n$ (in my testing, I was able to only get this to work for $2^n = 32$).
+
