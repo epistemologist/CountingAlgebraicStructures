@@ -173,3 +173,91 @@ Cayley tables of higher order groups can be calculated but isomorphism checking 
 $$\begin{align*}O( 2^{4n^3/27}  \cdot (2^n)!) &= O\left(2^{4n^3/27} \cdot \left( 2^{n/2} \cdot 2^{n 2^n} \cdot e^{-2^n} \right) \right) \\ &= \cdots = O(2^{n 2^n})\end{align*}$$
 
 or superexponential in $n$. Therefore, this approach only works for very small $n$ (in my testing, I was able to only get this to work for $2^n = 32$).
+
+### Rings
+The enumeration of rings is much more difficult as we have to deal with a set with two different operations instead of one. The following bash script enumerates the number of nonisomorphic rings with mace4 but is only practical for $n<10$:
+
+```sh
+#!/usr/bin/bash
+LADR_PATH="./LADR-2009-11A"
+
+gen_ladr_input() {
+    order=$1
+    echo "
+assign(domain_size, $order).
+assign(max_models, -1).
+
+formulas(assumptions).
+
+% Ring operations: add(x, y), mul(x, y)
+
+% Addition is associative: (x + y) + z = x + (y + z)
+all x all y all z (add(add(x,y),z) = add(x,add(y,z))).
+% Addition is commutative: x + y = y + x
+all x all y (add(x,y) = add(y,x)).
+% Additive identity: zero + x = x
+all x (add(0,x) = x).
+% Additive inverses: for each x, there exists y such that x + y = zero
+all x exists y (add(x,y) = 0).
+
+% Multiplication is associative: (x * y) * z = x * (y * z)
+all x all y all z (mul(mul(x,y),z) = mul(x,mul(y,z))).
+% Left distributivity: x * (y + z) = x*y + x*z
+all x all y all z (mul(x,add(y,z)) = add(mul(x,y),mul(x,z))).
+% Right distributivity: (x + y) * z = x*z + y*z
+all x all y all z (mul(add(x,y),z) = add(mul(x,z),mul(y,z))).
+
+end_of_list.
+    "
+}
+
+count_rings() {
+    order=$1
+    gen_ladr_input $order | tail -c +2 | \
+        $LADR_PATH/bin/mace4 2>/dev/null | \
+        $LADR_PATH/bin/interpformat standard | \
+        $LADR_PATH/bin/isofilter ignore_constants 2>/dev/null |& tail -n1
+}
+
+for i in $(seq 2 12); do
+    start_time=$SECONDS
+    echo $i && count_rings $i
+    end_time=$SECONDS
+    echo $((end_time-start_time)), "seconds"
+done
+```
+```txt
+2
+% isofilter ignore_constants: input=2, kept=2, checks=0, perms=0, 0.00 seconds.
+0, seconds
+3
+% isofilter ignore_constants: input=3, kept=2, checks=1, perms=2, 0.00 seconds.
+0, seconds
+4
+% isofilter ignore_constants: input=32, kept=11, checks=39, perms=99, 0.00 seconds.
+0, seconds
+5
+% isofilter ignore_constants: input=5, kept=2, checks=3, perms=48, 0.00 seconds.
+0, seconds
+6
+% isofilter ignore_constants: input=36, kept=4, checks=32, perms=348, 0.01 seconds.
+0, seconds
+7
+% isofilter ignore_constants: input=7, kept=2, checks=5, perms=2130, 0.00 seconds.
+0, seconds
+8
+% isofilter ignore_constants: input=1285, kept=52, checks=3045, perms=1119985, 0.52 seconds.
+1, seconds
+9
+% isofilter ignore_constants: input=103, kept=11, checks=147, perms=797717, 0.14 seconds.
+0, seconds
+10
+% isofilter ignore_constants: input=80, kept=4, checks=76, perms=469467, 0.09 seconds.
+2, seconds
+11
+% isofilter ignore_constants: input=11, kept=2, checks=9, perms=18018888, 1.52 seconds.
+4, seconds
+12
+% isofilter ignore_constants: input=1848, kept=22, checks=2798, perms=2521792053, 203.19 seconds.
+210, seconds
+```
