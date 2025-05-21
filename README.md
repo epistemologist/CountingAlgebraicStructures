@@ -261,3 +261,19 @@ done
 % isofilter ignore_constants: input=1848, kept=22, checks=2798, perms=2521792053, 203.19 seconds.
 210, seconds
 ```
+
+| Structure  | OEIS Sequence for a(n) = # strutures with n elements up to isomorphism   | Smallest a(n) Unknown | Asymptotics of a(n) / Other Notes  |
+|---|---|---|---|
+| magmas  |  [A001329](https://oeis.org/A001329)  |  closed form known |   $a(n) \sim \frac{n^{n^2}}{n!}$  |
+|  semigroup | [A027851](https://oeis.org/A027851)  | a(10)  |  | 
+| monoid | [A058129](https://oeis.org/A058129) | a(10)| | 
+| commutative magma | [A001425](http://oeis.org/A001425) | a(11) | $a(n) \sim \frac{n^\binom{n}{2}}{n!}$ | 
+| commutative semigroup | [A001426](http://oeis.org/A001426)| a(11) |  | 
+| commutative monoid | [A058131](http://oeis/org/A058131) | a(11) | | 
+| group | [A000001](https://oeis.org/A000001) | a(2048) | $a(p^e) \sim p^{(2/27)e^3 + O(e^{8/3})}$| 
+| abelian group  | [A000688](https://oeis.org/A000688) | a(n) multiplicative with $a(p^e) = \text{partitions}(e)$| see asymptotics of partition function [here](http://oeis.org/A000041)| 
+| ring| [A027623](https://oeis.org/A027623) | a(32) | multiplicative with $a(p^n) = p^{\frac{4}{27}n^3 + O(n^{5/2})}$, see [here](https://arxiv.org/abs/2107.13215) | 
+| commutative ring | [A037289](https://oeis.org/A037289) | a(32) | multiplicative with $a(p^n) = p^{\frac{2}{27}n^3 + O(n^{5/2})}$, see [here](https://arxiv.org/abs/2107.13215) |
+| ring with 1 | [A037291](https://oeis.org/A037291) | a(64) | multiplicative |
+| commutative ring with 1| [A127707](https://oeis.org/A127707) | a(64) | multiplicative | 
+| field | [A069513](https://oeis.org/A069513)| $a(p^n) = 1$, 0 otherwise | $a(n) = O(1)$ 
