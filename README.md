@@ -262,6 +262,8 @@ done
 210, seconds
 ```
 
+
+## Table of a(n)
 | Structure  | OEIS Sequence for a(n) = # strutures with n elements up to isomorphism   | Smallest a(n) Unknown | Asymptotics of a(n) / Other Notes  |
 |---|---|---|---|
 | magmas  |  [A001329](https://oeis.org/A001329)  |  closed form known |   $a(n) \sim \frac{n^{n^2}}{n!}$  |
